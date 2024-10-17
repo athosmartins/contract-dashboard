@@ -40,7 +40,7 @@ const MaterialContactsSection = () => {
     { name: 'Athos', role: 'Intermediador', phone: '+5531988598058', email: 'athosmartins@gmail.com' },
     { name: 'Henrique', role: 'Argon Engenharia', phone: '+5531996885771', email: 'henrique@argonengenharia.com' },
     { name: 'Fernando', role: 'Dacosta Incorporadora', phone: '+5531997090500', email: 'fernando@dacostaincorporadora.com' },
-    { name: 'Ricardo', role: 'Proprietário', phone: '+5531985271381', email: 'ricardo@example.com' },
+    { name: 'Ricardo', role: 'Proprietário', phone: '+5531985271381', email: 'riaro26@yahoo.com.br' },
   ];
 
   return (

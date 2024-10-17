@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Download, Phone, CheckCircle, Folder } from 'lucide-react';
+import { CheckCircle, Folder } from 'lucide-react';
 import MaterialContactsSection from './MaterialContactsSection';
 
 class ErrorBoundary extends React.Component {
@@ -8,9 +8,9 @@ class ErrorBoundary extends React.Component {
     this.state = { hasError: false, error: null, errorInfo: null };
   }
 
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
+  // static getDerivedStateFromError(error) {
+  //   return { hasError: true };
+  // }
 
   componentDidCatch(error, errorInfo) {
     this.setState({
@@ -49,12 +49,18 @@ const ProgressBar = ({ value }) => (
 
 const ContractDashboard = () => {
   const formatDate = (dateString) => {
-    // Set time explicitly to avoid timezone shift issues
-    const date = new Date(dateString + 'T12:00:00-03:00'); // Explicit São Paulo time (12:00 PM to avoid boundary issues)
-    const options = { timeZone: 'America/Sao_Paulo', day: '2-digit', month: 'short', year: 'numeric' };
-    const formatted = date.toLocaleDateString('pt-BR', options);
-    return formatted.replace('.', '').toLowerCase(); // Remove the period and lowercase the month
+    // Create a new Date object for the given date string
+    const date = new Date(dateString + 'T12:00:00-03:00'); // Explicit São Paulo time
+    
+    // Extract the day, month, and year components
+    const day = date.getDate().toString().padStart(2, '0'); // Ensures two digits for day
+    const month = date.toLocaleString('pt-BR', { month: 'short' }).replace('.', ''); // Short month in Portuguese, remove the dot
+    const year = date.getFullYear().toString().slice(-2); // Get the last two digits of the year
+  
+    // Format the date as DD/MM/YY
+    return `${day}/${month}/${year}`;
   };
+  
   
 
   const calculateDate = (baseDate, daysToAdd) => {
@@ -173,15 +179,15 @@ const calculateProgress = () => {
   const timelineSteps = [
     { emoji: '📤', date: contractData.contractSentDate, label: 'Envio do Contrato', days: 0 },
     { emoji: '✍️', date: contractData.signatureDate, label: 'Assinatura do Contrato', days: timeIntervals.signature },
-    { emoji: '📄', date: contractData.certidoesNegativas, label: 'Envio de certidões negativas de débito', days: timeIntervals.certidoesNegativas },
+    { emoji: '📄', date: contractData.certidoesNegativas, label: 'Envio de CNFs', days: timeIntervals.certidoesNegativas },
     { emoji: '✅', date: contractData.viabilityConfirmation, label: 'Confirmação da Viabilidade', days: timeIntervals.viabilityConfirmation },
-    { emoji: '💰', date: contractData.commissionPayment, label: 'Pagamento da comissão à intermediadora', days: 5 },
-    { emoji: '📋', date: contractData.projectSubmission, label: 'Protocolo do projeto na Prefeitura', days: timeIntervals.projectSubmission },
-    { emoji: '🏛️', date: contractData.projectApproval, label: 'Aprovação do projeto pela Prefeitura', months: 6, estimate: true },
+    { emoji: '💰', date: contractData.commissionPayment, label: 'Pagamento da Comissão', days: 5 },
+    { emoji: '📋', date: contractData.projectSubmission, label: 'Protocolo do Projeto na PBH', days: timeIntervals.projectSubmission },
+    { emoji: '🏛️', date: contractData.projectApproval, label: 'Aprovação do Projeto', months: 6, estimate: true },
     { emoji: '📑', date: contractData.incorporationSubmission, label: 'Protocolo da Incorporação', days: timeIntervals.incorporationSubmission },
-    { emoji: '🎨', date: contractData.finishingMaterialsDeadline, label: 'Prazo para Formalização de Troca de Revestimentos', days: timeIntervals.finishingMaterialsDeadline },
-    { emoji: '🏗️', date: contractData.incorporationRegistration, label: 'Registro da incorporação e início das obras', months: 2, estimate: true },
-    { emoji: '📦', date: contractData.materialQuantityDelivery, label: 'Entrega do quantitativo de materiais', days: timeIntervals.materialQuantityDelivery },
+    { emoji: '🎨', date: contractData.finishingMaterialsDeadline, label: 'Formalização de Troca de Revestimentos', days: timeIntervals.finishingMaterialsDeadline },
+    { emoji: '🏗️', date: contractData.incorporationRegistration, label: 'Registro da Incorporação e Início das Obras', months: 2, estimate: true },
+    { emoji: '📦', date: contractData.materialQuantityDelivery, label: 'Entrega do Quantitativo de Materiais', days: timeIntervals.materialQuantityDelivery },
     { emoji: '🏢', date: contractData.constructionEnd, label: 'Conclusão das Obras', months: timeIntervals.constructionEndMonths, estimate: true },
   ];
 

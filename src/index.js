@@ -1,11 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
-import ContractDashboard from './App';
+import ContractDashboard from './components/ContractDashboard';
+import ErrorBoundary from './ErrorBoundary';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+ReactDOM.render(
   <React.StrictMode>
-    <ContractDashboard />
-  </React.StrictMode>
+    <ErrorBoundary>
+      <ContractDashboard />
+    </ErrorBoundary>
+  </React.StrictMode>,
+  document.getElementById('root')
 );

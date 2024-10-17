@@ -96,6 +96,7 @@ const timeIntervals = {
   commissionPayment: 95,
   projectSubmission: 30,
   projectApproval: 180, // months equivalent in days for consistency
+  landPayment: 7,
   incorporationSubmission: 30,
   finishingMaterialsDeadline: 90,
   incorporationRegistration: 90,
@@ -125,6 +126,9 @@ const contractData = {
   },
   get projectApproval() {
     return calculateDate(this.projectSubmission, timeIntervals.projectApproval);
+  },
+  get landPayment() {
+    return calculateDate(this.projectApproval, timeIntervals.landPayment);
   },
   get incorporationSubmission() {
     return calculateDate(this.projectApproval, timeIntervals.incorporationSubmission);
@@ -179,11 +183,12 @@ const calculateProgress = () => {
   const timelineSteps = [
     { emoji: '📤', date: contractData.contractSentDate, label: 'Envio do Contrato', days: 0 },
     { emoji: '✍️', date: contractData.signatureDate, label: 'Assinatura do Contrato', days: timeIntervals.signature },
-    { emoji: '📄', date: contractData.certidoesNegativas, label: 'Envio de CNFs', days: timeIntervals.certidoesNegativas },
+    { emoji: '📄', date: contractData.certidoesNegativas, label: 'Envio de CNDs', days: timeIntervals.certidoesNegativas },
     { emoji: '✅', date: contractData.viabilityConfirmation, label: 'Confirmação da Viabilidade', days: timeIntervals.viabilityConfirmation },
     { emoji: '💰', date: contractData.commissionPayment, label: 'Pagamento da Comissão', days: 5 },
     { emoji: '📋', date: contractData.projectSubmission, label: 'Protocolo do Projeto na PBH', days: timeIntervals.projectSubmission },
     { emoji: '🏛️', date: contractData.projectApproval, label: 'Aprovação do Projeto', months: 6, estimate: true },
+    { emoji: '💰', date: contractData.landPayment, label: 'Pagamento do Terreno', days: timeIntervals.landPayment},
     { emoji: '📑', date: contractData.incorporationSubmission, label: 'Protocolo da Incorporação', days: timeIntervals.incorporationSubmission },
     { emoji: '🎨', date: contractData.finishingMaterialsDeadline, label: 'Formalização de Troca de Revestimentos', days: timeIntervals.finishingMaterialsDeadline },
     { emoji: '🏗️', date: contractData.incorporationRegistration, label: 'Registro da Incorporação e Início das Obras', months: 2, estimate: true },

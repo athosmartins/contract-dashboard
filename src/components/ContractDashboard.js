@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { CheckCircle, Folder } from 'lucide-react';
 import MaterialContactsSection from './MaterialContactsSection';
+import Hotjar from '@hotjar/browser';
+
+const siteId = 5177402;
+const hotjarVersion = 6;
+
+Hotjar.init(siteId, hotjarVersion);
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -60,8 +66,6 @@ const ContractDashboard = () => {
     // Format the date as DD/MM/YY
     return `${day}/${month}/${year}`;
   };
-  
-  
 
   const calculateDate = (baseDate, daysToAdd) => {
     const date = new Date(baseDate);
@@ -90,13 +94,14 @@ const ContractDashboard = () => {
 
 // Define time intervals in a single object
 const timeIntervals = {
-  signature: 2,
+  signature: 1,
   certidoesNegativas: 14,
   viabilityConfirmation: 90,
   commissionPayment: 95,
   projectSubmission: 30,
   projectApproval: 180, // months equivalent in days for consistency
   landPayment: 7,
+  deedSigning: 40,
   incorporationSubmission: 30,
   finishingMaterialsDeadline: 90,
   incorporationRegistration: 90,
@@ -129,6 +134,9 @@ const contractData = {
   },
   get landPayment() {
     return calculateDate(this.projectApproval, timeIntervals.landPayment);
+  },
+  get deedSigning() {
+    return calculateDate(this.projectApproval, timeIntervals.deedSigning);
   },
   get incorporationSubmission() {
     return calculateDate(this.projectApproval, timeIntervals.incorporationSubmission);
@@ -189,6 +197,7 @@ const calculateProgress = () => {
     { emoji: '📋', date: contractData.projectSubmission, label: 'Protocolo do Projeto na PBH', days: timeIntervals.projectSubmission },
     { emoji: '🏛️', date: contractData.projectApproval, label: 'Aprovação do Projeto', months: 6, estimate: true },
     { emoji: '💰', date: contractData.landPayment, label: 'Pagamento do Terreno', days: timeIntervals.landPayment},
+    { emoji: '📃', date: contractData.deedSigning, label: 'Assinatura da Escritura', days: timeIntervals.deedSigning},
     { emoji: '📑', date: contractData.incorporationSubmission, label: 'Protocolo da Incorporação', days: timeIntervals.incorporationSubmission },
     { emoji: '🎨', date: contractData.finishingMaterialsDeadline, label: 'Formalização de Troca de Revestimentos', days: timeIntervals.finishingMaterialsDeadline },
     { emoji: '🏗️', date: contractData.incorporationRegistration, label: 'Registro da Incorporação e Início das Obras', months: 2, estimate: true },
@@ -321,30 +330,6 @@ const calculateProgress = () => {
           ))}
         </ul>
       </div>
-      
-      {/* WhatsApp Contacts
-      <div className="mb-6 bg-white p-4 rounded-md shadow">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">Contatos Relevantes</h2>
-          <div className="flex flex-wrap justify-start gap-2">
-            {[
-              { name: 'Athos - Intermediador', phone: '+5531988598058' },
-              { name: 'Henrique - Argon Engenharia', phone: '+5531996885771' },
-              { name: 'Fernando - Dacosta Incorporadora', phone: '+5531997090500' },
-              { name: 'Ricardo - Proprietário', phone: '+5531985271381' },
-            ].map((contact, index) => (
-              <a
-                key={index}
-                href={`https://wa.me/${contact.phone}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center py-1 px-3 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 transition-colors"
-              >
-                <Phone size={16} className="mr-1" />
-                {contact.name}
-              </a>
-            ))}
-          </div>
-        </div> */}
 
         {/* Material Contacts Section */}
         <MaterialContactsSection />

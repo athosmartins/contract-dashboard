@@ -100,7 +100,7 @@ const timeIntervals = {
   viabilityConfirmation: 90,
   commissionPayment: 95,
   projectSubmission: 30,
-  projectApproval: 180, // months equivalent in days for consistency
+  projectApproval: 180, // days
   landPayment: 7,
   deedSigning: 40,
   incorporationSubmission: 30,
@@ -193,21 +193,130 @@ const calculateProgress = () => {
   ];
 
   const timelineSteps = [
-    { emoji: '📤', date: contractData.contractSentDate, label: 'Envio do Contrato', days: 0 },
-    { emoji: '✍️', date: contractData.signatureDate, label: 'Assinatura do Contrato', days: timeIntervals.signature },
-    { emoji: '🔑', date: contractData.keysDelivery, label: 'Entrega de Chaves', days: timeIntervals.signature },
-    { emoji: '📄', date: contractData.certidoesNegativas, label: 'Envio de CNDs', days: timeIntervals.certidoesNegativas },
-    { emoji: '✅', date: contractData.viabilityConfirmation, label: 'Confirmação da Viabilidade', days: timeIntervals.viabilityConfirmation },
-    { emoji: '💰', date: contractData.commissionPayment, label: 'Pagamento da Comissão', days: 5 },
-    { emoji: '📋', date: contractData.projectSubmission, label: 'Protocolo do Projeto na PBH', days: timeIntervals.projectSubmission },
-    { emoji: '🏛️', date: contractData.projectApproval, label: 'Aprovação do Projeto', months: 6, estimate: true },
-    { emoji: '💰', date: contractData.landPayment, label: 'Pagamento do Terreno', days: timeIntervals.landPayment},
-    { emoji: '📃', date: contractData.deedSigning, label: 'Assinatura da Escritura', days: timeIntervals.deedSigning},
-    { emoji: '📑', date: contractData.incorporationSubmission, label: 'Protocolo da Incorporação', days: timeIntervals.incorporationSubmission },
-    { emoji: '🎨', date: contractData.finishingMaterialsDeadline, label: 'Formalização de Troca de Revestimentos', days: timeIntervals.finishingMaterialsDeadline },
-    { emoji: '🏗️', date: contractData.incorporationRegistration, label: 'Registro da Incorporação e Início das Obras', months: 2, estimate: true },
-    { emoji: '📦', date: contractData.materialQuantityDelivery, label: 'Entrega do Quantitativo de Materiais', days: timeIntervals.materialQuantityDelivery },
-    { emoji: '🏢', date: contractData.constructionEnd, label: 'Conclusão das Obras', months: timeIntervals.constructionEndMonths, estimate: true },
+    {
+      emoji: '📤',
+      date: contractData.contractSentDate,
+      label: 'Envio do Contrato',
+      time: 0,
+      timeUnit: 'dias',
+      fromStepLabel: null,
+      clickable: false,
+    },
+    {
+      emoji: '✍️',
+      date: contractData.signatureDate,
+      label: 'Assinatura do Contrato',
+      time: timeIntervals.signature,
+      timeUnit: 'dias',
+      fromStepLabel: 'Envio do Contrato',
+    },
+    {
+      emoji: '🔑',
+      date: contractData.keysDelivery,
+      label: 'Entrega de Chaves',
+      time: timeIntervals.keysDelivery,
+      timeUnit: 'dias',
+      fromStepLabel: 'Assinatura do Contrato',
+    },
+    {
+      emoji: '📄',
+      date: contractData.certidoesNegativas,
+      label: 'Envio de CNDs',
+      time: timeIntervals.certidoesNegativas,
+      timeUnit: 'dias',
+      fromStepLabel: 'Assinatura do Contrato',
+    },
+    {
+      emoji: '✅',
+      date: contractData.viabilityConfirmation,
+      label: 'Confirmação da Viabilidade',
+      time: timeIntervals.viabilityConfirmation,
+      timeUnit: 'dias',
+      fromStepLabel: 'Assinatura do Contrato',
+    },
+    {
+      emoji: '💰',
+      date: contractData.commissionPayment,
+      label: 'Pagamento da Comissão',
+      time: timeIntervals.commissionPayment,
+      timeUnit: 'dias',
+      fromStepLabel: 'Assinatura do Contrato',
+    },
+    {
+      emoji: '📋',
+      date: contractData.projectSubmission,
+      label: 'Protocolo do Projeto na PBH',
+      time: timeIntervals.projectSubmission,
+      timeUnit: 'dias',
+      fromStepLabel: 'Confirmação da Viabilidade',
+    },
+    {
+      emoji: '🏛️',
+      date: contractData.projectApproval,
+      label: 'Aprovação do Projeto',
+      time: Math.round(timeIntervals.projectApproval / 30), // Convert days to months
+      timeUnit: 'meses',
+      fromStepLabel: 'Protocolo do Projeto na PBH',
+      estimate: true,
+    },
+    {
+      emoji: '💰',
+      date: contractData.landPayment,
+      label: 'Pagamento do Terreno',
+      time: timeIntervals.landPayment,
+      timeUnit: 'dias',
+      fromStepLabel: 'Aprovação do Projeto',
+    },
+    {
+      emoji: '📃',
+      date: contractData.deedSigning,
+      label: 'Assinatura da Escritura',
+      time: timeIntervals.deedSigning,
+      timeUnit: 'dias',
+      fromStepLabel: 'Aprovação do Projeto',
+    },
+    {
+      emoji: '📑',
+      date: contractData.incorporationSubmission,
+      label: 'Protocolo da Incorporação',
+      time: timeIntervals.incorporationSubmission,
+      timeUnit: 'dias',
+      fromStepLabel: 'Aprovação do Projeto',
+    },
+    {
+      emoji: '🎨',
+      date: contractData.finishingMaterialsDeadline,
+      label: 'Formalização de Troca de Revestimentos',
+      time: timeIntervals.finishingMaterialsDeadline,
+      timeUnit: 'dias',
+      fromStepLabel: 'Aprovação do Projeto',
+    },
+    {
+      emoji: '🏗️',
+      date: contractData.incorporationRegistration,
+      label: 'Registro da Incorporação e Início das Obras',
+      time: Math.round(timeIntervals.incorporationRegistration / 30),
+      timeUnit: 'meses',
+      fromStepLabel: 'Protocolo da Incorporação',
+      estimate: true,
+    },
+    {
+      emoji: '📦',
+      date: contractData.materialQuantityDelivery,
+      label: 'Entrega do Quantitativo de Materiais',
+      time: timeIntervals.materialQuantityDelivery,
+      timeUnit: 'dias',
+      fromStepLabel: 'Formalização de Troca de Revestimentos',
+    },
+    {
+      emoji: '🏢',
+      date: contractData.constructionEnd,
+      label: 'Conclusão das Obras',
+      time: timeIntervals.constructionEndMonths,
+      timeUnit: 'meses',
+      fromStepLabel: 'Registro da Incorporação e Início das Obras',
+      estimate: true,
+    },
   ];
 
   const getNextStepName = () => {
@@ -243,8 +352,18 @@ const calculateProgress = () => {
 
   const [, setUpdate] = useState(0);
 
+  // State for expanded steps
+  const [expandedSteps, setExpandedSteps] = useState(Array(timelineSteps.length).fill(false));
+
+  const toggleExpanded = (index) => {
+    setExpandedSteps(prevExpandedSteps => {
+      const newExpanded = [...prevExpandedSteps];
+      newExpanded[index] = !newExpanded[index];
+      return newExpanded;
+    });
+  };
+
   useEffect(() => {
-    
     console.log("MaterialContactsSection:", MaterialContactsSection);
 
     const scheduleNextUpdate = () => {
@@ -278,24 +397,62 @@ const calculateProgress = () => {
       
       {/* Timeline */}
       <div className="mb-6 bg-white p-4 rounded-md shadow">
-        <h2 className="text-xl font-semibold mb-4 text-gray-700">Linha do Tempo</h2>
+        <div className="flex items-baseline mb-4">
+          <h2 className="text-xl font-semibold text-gray-700">Linha do Tempo</h2>
+          <span className="ml-2 text-gray-500 text-sm">(Clique nos itens para mais informações)</span>
+        </div>
         <ul className="space-y-4">
-          {timelineSteps.map((item, index) => (
-            <li key={index} className={`flex items-center ${getCurrentStep() === index ? 'font-bold' : ''}`}>
-              <span className="mr-3 text-xl">{item.emoji}</span>
-              <div className="flex-grow">
-                <span className={`text-gray-700 ${index < getCurrentStep() ? 'line-through' : ''}`}>{item.label}: </span> 
-                <span className={`text-gray-900 ${index < getCurrentStep() ? 'line-through' : ''}`}>{formatDate(item.date)}</span>
-                <span className="ml-2 text-gray-500 text-sm">
-                  ({item.months ? `${item.months} meses` : `${item.days} dias`}{item.estimate ? ' - Estimativa' : ''})
-                </span>
-                {getCurrentStep() === index && <span className="ml-2 text-green-500 text-sm">(Etapa Atual)</span>}
-              </div>
-              {index < getCurrentStep() && (
-                <CheckCircle className="text-green-500 ml-2" size={20} />
-              )}
-            </li>
-          ))}
+          {timelineSteps.map((item, index) => {
+            const isExpanded = expandedSteps[index];
+
+            // Handle pluralization
+            const timeValue = item.time;
+            let timeUnit = item.timeUnit;
+
+            if (timeValue === 1) {
+              if (timeUnit === 'dias') timeUnit = 'dia';
+              if (timeUnit === 'meses') timeUnit = 'mês';
+            }
+
+            if (item.clickable === false) {
+              // Non-clickable item (e.g., "Envio do Contrato")
+              return (
+                <li key={index} className={`flex items-center ${getCurrentStep() === index ? 'font-bold' : ''}`}>
+                  <span className="mr-3 text-xl">{item.emoji}</span>
+                  <div className="flex-grow">
+                    <span className={`text-gray-700`}>{item.label}: </span> 
+                    <span className={`text-gray-900`}>{formatDate(item.date)}</span>
+                    {getCurrentStep() === index && <span className="ml-2 text-green-500 text-sm">(Etapa Atual)</span>}
+                  </div>
+                  {index < getCurrentStep() && (
+                    <CheckCircle className="text-green-500 ml-2" size={20} />
+                  )}
+                </li>
+              );
+            }
+
+            return (
+              <li key={index} className={`flex flex-col ${getCurrentStep() === index ? 'font-bold' : ''}`}>
+                <div className="flex items-center cursor-pointer" onClick={() => toggleExpanded(index)}>
+                  <span className="mr-3 text-xl">{item.emoji}</span>
+                  <div className="flex-grow">
+                    <span className={`text-gray-700 ${index < getCurrentStep() ? 'line-through' : ''}`}>{item.label}: </span> 
+                    <span className={`text-gray-900 ${index < getCurrentStep() ? 'line-through' : ''}`}>{formatDate(item.date)}</span>
+                    {getCurrentStep() === index && <span className="ml-2 text-green-500 text-sm">(Etapa Atual)</span>}
+                  </div>
+                  {index < getCurrentStep() && (
+                    <CheckCircle className="text-green-500 ml-2" size={20} />
+                  )}
+                </div>
+                {isExpanded && (
+                  <div className="ml-8 mt-2 text-gray-600 italic text-sm">
+                    {timeValue} {timeUnit} a partir de {item.fromStepLabel}
+                    {item.estimate ? ' (Estimativa)' : ''}
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
       
@@ -305,18 +462,10 @@ const calculateProgress = () => {
         <h3 className="font-semibold mb-2 text-gray-700">Progresso até Próxima Etapa - {getNextStepName()}</h3>
         <ProgressBar value={calculateProgress()} />
         <p className="text-right text-gray-600 mt-2">
-        <p className="text-right text-gray-600">
-        <p className="text-right text-gray-600">
           {calculateDaysRemaining() === 0 
             ? 'Prazo termina hoje!' 
             : `${calculateDaysRemaining()} ${calculateDaysRemaining() === 1 ? 'dia' : 'dias'} até término do prazo`}
         </p>
-        </p>
-        </p>
-        {/* Debug information */}
-        {/* <p className="text-sm text-gray-500 mt-2">
-          Debug: Progress = {calculateProgress().toFixed(2)}%, Current Step: {getCurrentStep()}
-        </p> */}
       </div>
       
       

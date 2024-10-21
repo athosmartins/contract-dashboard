@@ -420,8 +420,8 @@ const calculateProgress = () => {
                 <li key={index} className={`flex items-center ${getCurrentStep() === index ? 'font-bold' : ''}`}>
                   <span className="mr-3 text-xl">{item.emoji}</span>
                   <div className="flex-grow">
-                    <span className={`text-gray-700`}>{item.label}: </span> 
-                    <span className={`text-gray-900`}>{formatDate(item.date)}</span>
+                    <span className={`text-gray-700 ${index < getCurrentStep() ? 'line-through' : ''}`}>{item.label}: </span> 
+                    <span className={`text-gray-900 ${index < getCurrentStep() ? 'line-through' : ''}`}>{formatDate(item.date)}</span>
                     {getCurrentStep() === index && <span className="ml-2 text-green-500 text-sm">(Etapa Atual)</span>}
                   </div>
                   {index < getCurrentStep() && (
@@ -429,6 +429,7 @@ const calculateProgress = () => {
                   )}
                 </li>
               );
+
             }
 
             return (

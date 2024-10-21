@@ -83,7 +83,7 @@ const ContractDashboard = () => {
     const diffInMs = end - saoPauloNow;
     const diffInDays = (diffInMs / (1000 * 60 * 60 * 24))-1;
 
-    return Math.max(1, Math.ceil(diffInDays));
+    return Math.max(0, Math.ceil(diffInDays));
   };
   
   const addMonths = (date, months) => {
@@ -95,6 +95,7 @@ const ContractDashboard = () => {
 // Define time intervals in a single object
 const timeIntervals = {
   signature: 1,
+  keysDelivery: 4,
   certidoesNegativas: 14,
   viabilityConfirmation: 90,
   commissionPayment: 95,
@@ -104,7 +105,7 @@ const timeIntervals = {
   deedSigning: 40,
   incorporationSubmission: 30,
   finishingMaterialsDeadline: 90,
-  incorporationRegistration: 90,
+  incorporationRegistration: 60,
   materialQuantityDelivery: 90,
   constructionEndMonths: 24, // Use months here
 };
@@ -116,6 +117,9 @@ const contractData = {
   },
   get signatureDate() {
     return calculateDate(this.contractSentDate, timeIntervals.signature); 
+  },
+  get keysDelivery() {
+    return calculateDate(this.signatureDate, timeIntervals.keysDelivery);
   },
   get certidoesNegativas() {
     return calculateDate(this.signatureDate, timeIntervals.certidoesNegativas);
@@ -191,6 +195,7 @@ const calculateProgress = () => {
   const timelineSteps = [
     { emoji: '📤', date: contractData.contractSentDate, label: 'Envio do Contrato', days: 0 },
     { emoji: '✍️', date: contractData.signatureDate, label: 'Assinatura do Contrato', days: timeIntervals.signature },
+    { emoji: '🔑', date: contractData.keysDelivery, label: 'Entrega de Chaves', days: timeIntervals.signature },
     { emoji: '📄', date: contractData.certidoesNegativas, label: 'Envio de CNDs', days: timeIntervals.certidoesNegativas },
     { emoji: '✅', date: contractData.viabilityConfirmation, label: 'Confirmação da Viabilidade', days: timeIntervals.viabilityConfirmation },
     { emoji: '💰', date: contractData.commissionPayment, label: 'Pagamento da Comissão', days: 5 },
@@ -301,7 +306,11 @@ const calculateProgress = () => {
         <ProgressBar value={calculateProgress()} />
         <p className="text-right text-gray-600 mt-2">
         <p className="text-right text-gray-600">
-        {calculateDaysRemaining()} {calculateDaysRemaining() === 1 ? 'dia' : 'dias'} até término do prazo     
+        <p className="text-right text-gray-600">
+          {calculateDaysRemaining() === 0 
+            ? 'Prazo termina hoje!' 
+            : `${calculateDaysRemaining()} ${calculateDaysRemaining() === 1 ? 'dia' : 'dias'} até término do prazo`}
+        </p>
         </p>
         </p>
         {/* Debug information */}

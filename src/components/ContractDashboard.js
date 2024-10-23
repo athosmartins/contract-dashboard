@@ -186,6 +186,7 @@ const timelineSteps = [
     time: timeIntervalsPlanned.signature,
     timeUnit: 'dias',
     fromStepLabel: 'Envio do Contrato',
+    clickable: false,
   },
   {
     emoji: '🔑',
@@ -195,6 +196,7 @@ const timelineSteps = [
     time: timeIntervalsPlanned.keysDelivery,
     timeUnit: 'dias',
     fromStepLabel: 'Assinatura do Contrato',
+    clickable: false,
   },
   {
     emoji: '📄',
